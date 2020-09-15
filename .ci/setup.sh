@@ -80,10 +80,6 @@ elif [[ "$MULTIPLE_HIDDEN" == "no" ]]; then
   sed -i 's/flags: +doctests/flags: +doctests -multiple-hidden/g' cabal.project.local
 fi
 
-if [[ "$CI_COMMIT_BRANCH" =~ "^partial-evaluator-" ]]; then
-  sed -i 's/-experimental-evaluator/+experimental-evaluator/g' cabal.project.local
-fi
-
 if [[ "$GHC_VERSION" == 9.*.*.* ]]; then
   echo "
    repository head.hackage.ghc.haskell.org

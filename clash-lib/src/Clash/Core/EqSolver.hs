@@ -118,20 +118,20 @@ normalizeAdd (a, b) = do
   lhsLit (LitTy (NumTy n)) y                 = Just (n, y)
   lhsLit _                 _                 = Nothing
 
--- | Tests for unreachable alternative due to types being "absurd". See
+-- | Tests for nonsencical patterns due to types being "absurd". See
 -- @isAbsurdEq@ for more info.
-isAbsurdAlt
+isAbsurdPat
   :: TyConMap
-  -> Alt
+  -> Pat
   -> Bool
-isAbsurdAlt tcm alt =
-  any (isAbsurdEq tcm exts) (altEqs tcm alt)
+isAbsurdPat tcm pat =
+  any (isAbsurdEq tcm exts) (patEqs tcm pat)
  where
-  exts = case alt of
-    (DataPat _dc extNms _ids,_) -> mkVarSet extNms
+  exts = case pat of
+    DataPat _dc extNms _ids -> mkVarSet extNms
     _ -> emptyVarSet
 
--- | Determines if an "equation" obtained through @altEqs@ or @typeEq@ is
+-- | Determines if an "equation" obtained through @patEqs@ or @typeEq@ is
 -- absurd. That is, it tests if two types that are definitely not equal are
 -- asserted to be equal OR if the computation of the types yield some absurd
 -- (intermediate) result such as -1.
@@ -146,11 +146,11 @@ isAbsurdEq tcm exts ((left0, right0)) =
     lr -> any (==AbsurdSolution) (solveEq tcm exts lr)
 
 -- | Get constraint equations
-altEqs
+patEqs
   :: TyConMap
-  -> Alt
+  -> Pat
   -> [(Type, Type)]
-altEqs tcm (pat, _term) =
+patEqs tcm pat =
  catMaybes (map (typeEq tcm . varType) (snd (patIds pat)))
 
 -- | If type is an equation, return LHS and RHS.

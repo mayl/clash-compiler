@@ -47,6 +47,7 @@ module Clash.Core.VarEnv
     -- ** Modification
   , delVarSetByKey
   , unionVarSet
+  , differenceVarSet
     -- ** Working with predicates
     -- *** Searching
   , elemVarSet
@@ -293,6 +294,13 @@ unionVarSet
   -> VarSet
   -> VarSet
 unionVarSet = unionUniqSet
+
+-- | Difference of two sets
+differenceVarSet
+  :: VarSet
+  -> VarSet
+  -> VarSet
+differenceVarSet = differenceUniqSet
 
 -- | Is the variable an element in the set
 elemVarSet
